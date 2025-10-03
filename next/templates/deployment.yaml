@@ -1,20 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "next-app.fullname" . }}
+  name: {{ .Release.Name }}-deployment
+  namespace: {{ .Values.namespace }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.replicaCount}}
   selector:
     matchLabels:
-      app: {{ include "next-app.name" . }}
+      app: {{ .Release.Name }}
+      release: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ include "next-app.name" . }}
+        app: {{ .Release.Name }}
+        release: {{ .Release.Name }}
     spec:
       containers:
-        - name: next-app
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            - containerPort: 3000
+      - name: {{ .Chart.Name }}
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        ports:
+        - containerPort: {{ .Values.image.containerPort }}
+        env:
+        - name: NEXT_PUBLIC_API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: {{ .Release.Name }}-config
+              key: api-url

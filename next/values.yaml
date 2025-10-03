@@ -1,20 +1,12 @@
 replicaCount: 2
-
+namespace: nextjs
 image:
   repository: phea12/next-homework-image
-  tag: "latest"   # Jenkins will replace this with ${BUILD_NUMBER}
-  pullPolicy: IfNotPresent
+  tag: "10"
+  containerPort: 3000
 
 service:
   type: ClusterIP
   port: 3000
+  targetPort: 3000
 
-ingress:
-  enabled: true
-  className: "nginx"
-  hosts:
-    - host: next.local
-      paths:
-        - path: /
-          pathType: Prefix
-  tls: []  # add TLS if needed
