@@ -2,7 +2,7 @@ replicaCount: 2
 namespace: nextjs
 image:
   repository: phea12/next-homework-image
-  tag: "10"
+  tag: "3"
   containerPort: 3000
 
 service:
